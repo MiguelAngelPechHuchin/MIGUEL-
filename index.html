@@ -1,0 +1,3102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FDRA-CAPA - Sistema Moderno de Gestión</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #475569;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --info: #0891b2;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --gradient-start: #2563eb;
+            --gradient-end: #1e40af;
+            --shadow: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.6;
+        }
+
+        /* Pantalla de Login */
+        .login-screen {
+            max-width: 480px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 24px;
+            color: var(--success);
+        }
+
+        .version {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-body {
+            padding: 40px;
+        }
+
+        .user-type-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .user-type-btn {
+            padding: 20px;
+            border: 2px solid var(--gray-light);
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .user-type-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .user-type-btn.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .user-type-btn i {
+            font-size: 24px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .user-type-btn .label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-type-btn .desc {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .login-form {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .login-form.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--danger);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            border-left: 4px solid;
+        }
+
+        .message.success {
+            background: #f0fdf4;
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .message.warning {
+            background: #fffbeb;
+            color: var(--warning);
+            border-color: var(--warning);
+        }
+
+        /* Sistema Principal Aspirante */
+        .aspirante-system {
+            display: none;
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            animation: scaleIn 0.6s ease;
+        }
+
+        /* Sistema Principal Admin */
+        .admin-system {
+            display: none;
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            animation: scaleIn 0.6s ease;
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .container {
+            width: 100%;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: var(--dark);
+            border-bottom: 4px solid var(--primary);
+        }
+
+        .nav-tab {
+            padding: 18px 25px;
+            color: white;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: all 0.3s ease;
+            border-right: 1px solid rgba(255,255,255,0.1);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .nav-tab:last-child {
+            border-right: none;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-tab.active {
+            background: rgba(255,255,255,0.15);
+            border-bottom: 3px solid var(--success);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos para el formulario tipo carrusel */
+        .form-carousel {
+            position: relative;
+            background: white;
+            border-radius: 15px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .carousel-steps {
+            display: flex;
+            background: var(--light);
+            padding: 20px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            font-weight: 600;
+            color: var(--gray);
+            border-right: 1px solid var(--gray-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step:last-child {
+            border-right: none;
+        }
+
+        .step.active {
+            color: var(--primary);
+        }
+
+        .step.active::after {
+            content: '';
+            position: absolute;
+            bottom: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--primary);
+        }
+
+        .step.completed {
+            color: var(--success);
+        }
+
+        .step.completed i {
+            color: var(--success);
+        }
+
+        .carousel-content {
+            padding: 30px;
+        }
+
+        .carousel-page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .carousel-page.active {
+            display: block;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--gray-light);
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* ESTILOS PARA GESTIÓN DE DOCUMENTOS */
+        .documentos-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .documentos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .documento-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+
+        .documento-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .documento-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .documento-title {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .documento-requerido {
+            background: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .documento-no-requerido {
+            background: #6c757d;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .documento-upload {
+            margin-top: 10px;
+        }
+
+        .upload-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: #2980b9;
+        }
+
+        .upload-btn.disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .documento-info {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .documento-estado {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .estado-pendiente {
+            background: #f39c12;
+            color: white;
+        }
+
+        .estado-completo {
+            background: #27ae60;
+            color: white;
+        }
+
+        .estado-aprobado {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .estado-rechazado {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .documento-nombre {
+            font-size: 12px;
+            color: #34495e;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+
+        .progress-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .doc-progress {
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .doc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .progress-text {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        /* PANEL DE ADMINISTRADOR - VISTA DE DOCUMENTOS */
+        .expediente-documentos {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .documentos-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .documentos-table th {
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .documentos-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .documentos-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .documento-acciones {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-ver {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-aprobar {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-rechazar {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .visor-documento {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        /* Estilos para el panel administrativo */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: currentColor;
+            opacity: 0.1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card.total { border-color: var(--primary); color: var(--primary); }
+        .stat-card.pendientes { border-color: var(--warning); color: var(--warning); }
+        .stat-card.aprobados { border-color: var(--success); color: var(--success); }
+        .stat-card.rechazados { border-color: var(--danger); color: var(--danger); }
+        .stat-card.en_revision { border-color: var(--info); color: var(--info); }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .filters {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            align-items: end;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .search-box input {
+            padding-left: 45px;
+        }
+
+        .aspirante-card {
+            background: white;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .aspirante-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .aspirante-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .aspirante-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .aspirante-folio {
+            background: var(--light);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--gray);
+        }
+
+        .aspirante-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--dark);
+            min-width: 80px;
+            font-size: 14px;
+        }
+
+        .estado-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .estado-pendiente { background: #fef3c7; color: #92400e; }
+        .estado-aprobado { background: #dcfce7; color: #166534; }
+        .estado-rechazado { background: #fee2e2; color: #991b1b; }
+        .estado-en_revision { background: #cffafe; color: #155e75; }
+
+        .aspirante-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+            width: auto;
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            width: auto;
+        }
+
+        .hidden { display: none; }
+        .d-none { display: none; }
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mb-20 { margin-bottom: 20px; }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 25px;
+            padding: 20px;
+        }
+
+        .pagination-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: white;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            transition: opacity 0.3s ease;
+        }
+
+        .close-modal:hover {
+            opacity: 0.8;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .document-section {
+            background: white;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .document-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .document-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .document-item {
+            display: flex;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+
+        .document-label {
+            font-weight: 600;
+            color: var(--dark);
+            min-width: 160px;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .document-value {
+            color: #555;
+            flex-grow: 1;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .empty-value {
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* Estilos para mensajes temporales */
+        .message-temp {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            max-width: 350px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
+            animation: slideInRight 0.3s ease;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* Header específico para aspirantes */
+        .aspirante-header {
+            background: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+        }
+
+        .aspirante-nav {
+            background: var(--success);
+            border-bottom: 4px solid var(--primary);
+        }
+
+        /* Estados de carga */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .loading-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: var(--gray-light);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .login-screen, .aspirante-system, .admin-system {
+                border-radius: 15px;
+            }
+            
+            .login-header {
+                padding: 30px 20px;
+            }
+            
+            .login-body {
+                padding: 25px;
+            }
+            
+            .user-type-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .carousel-steps {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .step {
+                border-right: none;
+                border-bottom: 1px solid var(--gray-light);
+            }
+            
+            .step.active::after {
+                display: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .aspirante-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .aspirante-header {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .aspirante-actions {
+                flex-direction: column;
+            }
+            
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+            
+            .document-item {
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .document-label {
+                min-width: auto;
+            }
+
+            .message-temp {
+                left: 10px;
+                right: 10px;
+                max-width: none;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .documentos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de Login -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-header">
+            <div class="logo">
+                <i class="fas fa-water"></i>
+                CAPA QUINTANA ROO - SISTEMA FDRA
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <h2>Formulario Digital de Registro de Aspirantes</h2>
+            <div class="version">v5.0.0</div>
+        </div>
+
+        <div class="login-body">
+            <div class="user-type-selector">
+                <div class="user-type-btn active" data-type="aspirante">
+                    <i class="fas fa-user-graduate"></i>
+                    <div class="label">Soy Aspirante</div>
+                    <div class="desc">Registrar mi solicitud de empleo</div>
+                </div>
+                <div class="user-type-btn" data-type="admin">
+                    <i class="fas fa-user-shield"></i>
+                    <div class="label">Soy Administrador</div>
+                    <div class="desc">Acceder al panel de control</div>
+                </div>
+            </div>
+
+            <!-- Formulario para Aspirantes -->
+            <div class="login-form active" id="aspiranteForm">
+                <div class="form-group">
+                    <label>Para comenzar tu registro:</label>
+                    <p style="color: var(--gray); font-size: 14px; margin-top: 5px;">
+                        Completa el formulario de solicitud paso a paso. Solo tendrás acceso al formulario de registro.
+                    </p>
+                </div>
+                <button class="btn btn-primary" onclick="iniciarRegistroAspirante()">
+                    <i class="fas fa-play-circle"></i> Iniciar Registro
+                </button>
+            </div>
+
+            <!-- Formulario para Administradores -->
+            <div class="login-form" id="adminForm">
+                <div class="form-group">
+                    <label class="required">Contraseña de Administrador</label>
+                    <input type="password" id="adminPassword" placeholder="Ingrese la contraseña">
+                    <small style="color: var(--gray); font-size: 12px; margin-top: 5px; display: block;">
+                        Contacta al administrador del sistema para obtener acceso
+                    </small>
+                </div>
+                <button class="btn btn-primary" onclick="loginAdmin()">
+                    <i class="fas fa-sign-in-alt"></i> Acceder al Panel
+                </button>
+                
+                <div class="text-center mt-20">
+                    <button class="btn btn-info btn-sm" onclick="crearDatosPrueba()" style="margin-right: 8px; width: auto;">
+                        <i class="fas fa-vial"></i> Datos Prueba
+                    </button>
+                    <button class="btn btn-warning btn-sm" onclick="probarConexionInmediata()" style="width: auto;">
+                        <i class="fas fa-bolt"></i> Probar Conexión
+                    </button>
+                </div>
+                
+                <div id="messageLogin" class="mt-20"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistema para Aspirantes (solo formulario) -->
+    <div class="aspirante-system" id="aspiranteSystem">
+        <div class="container">
+            <header class="aspirante-header">
+                <div class="logo">
+                    <i class="fas fa-water"></i>
+                    CAPA QUINTANA ROO - FORMULARIO DE REGISTRO
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h1>Formulario de Solicitud de Empleo</h1>
+                <div class="version">v5.0.0</div>
+            </header>
+
+            <nav class="nav-tabs aspirante-nav">
+                <div class="nav-tab active">
+                    <i class="fas fa-user-plus"></i>Formulario de Registro
+                </div>
+                <div class="nav-tab logout-btn" onclick="logoutSystem()">
+                    <i class="fas fa-sign-out-alt"></i>Salir del Sistema
+                </div>
+            </nav>
+
+            <!-- Contenido del Formulario -->
+            <div class="tab-content active">
+                <!-- Sección para mostrar folio -->
+                <div id="folioDisplay" style="display: none; background: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%); color: white; padding: 15px; border-radius: 10px; margin: 10px 0; font-weight: bold; text-align: center; font-size: 16px;">
+                    <i class="fas fa-id-card"></i> Tu folio de registro es: <span id="folioValue"></span>
+                </div>
+
+                <div class="form-carousel">
+                    <div class="carousel-steps">
+                        <div class="step active" data-step="1">
+                            <i class="fas fa-user-circle"></i> Información Personal
+                        </div>
+                        <div class="step" data-step="2">
+                            <i class="fas fa-briefcase"></i> Experiencia Laboral
+                        </div>
+                        <div class="step" data-step="3">
+                            <i class="fas fa-graduation-cap"></i> Educación
+                        </div>
+                        <div class="step" data-step="4">
+                            <i class="fas fa-language"></i> Idiomas y Habilidades
+                        </div>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress" id="progressBar"></div>
+                    </div>
+
+                    <div class="carousel-content">
+                        <!-- Paso 1: Información Personal -->
+                        <div class="carousel-page active" id="step1">
+                            <div class="section-title">
+                                <i class="fas fa-user-circle"></i> Información Personal
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="required">Nombre Completo</label>
+                                    <input type="text" id="nombre" placeholder="Ingrese su nombre completo" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Correo Electrónico</label>
+                                    <input type="email" id="email" placeholder="ejemplo@correo.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Teléfono</label>
+                                    <input type="tel" id="telefono" placeholder="(999) 123-4567" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Puesto de Interés</label>
+                                    <select id="puesto" required>
+                                        <option value="">Seleccione un puesto</option>
+                                        <option value="Operador">Operador</option>
+                                        <option value="Técnico">Técnico</option>
+                                        <option value="Administrativo">Administrativo</option>
+                                        <option value="Supervisor">Supervisor</option>
+                                        <option value="Gerente">Gerente</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Género</label>
+                                    <select id="genero">
+                                        <option value="">Seleccione</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Edad</label>
+                                    <input type="number" id="edad" min="18" max="70" placeholder="Edad">
+                                </div>
+                            </div>
+                            <div class="carousel-nav">
+                                <div></div>
+                                <button class="btn btn-primary" onclick="nextStep()">
+                                    Siguiente <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Paso 2: Experiencia Laboral -->
+                        <div class="carousel-page" id="step2">
+                            <div class="section-title">
+                                <i class="fas fa-briefcase"></i> Experiencia Laboral
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Años de Experiencia</label>
+                                    <input type="number" id="aniosExperiencia" min="0" max="50" placeholder="Años de experiencia">
+                                </div>
+                                <div class="form-group">
+                                    <label>Experiencia Laboral</label>
+                                    <textarea id="experiencia" rows="4" placeholder="Describa su experiencia laboral relevante..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Último Empleo</label>
+                                    <input type="text" id="ultimoEmpleo" placeholder="Nombre de la empresa">
+                                </div>
+                                <div class="form-group">
+                                    <label>Último Puesto</label>
+                                    <input type="text" id="ultimoPuesto" placeholder="Puesto que desempeñaba">
+                                </div>
+                            </div>
+                            <div class="carousel-nav">
+                                <button class="btn btn-secondary" onclick="prevStep()">
+                                    <i class="fas fa-arrow-left"></i> Anterior
+                                </button>
+                                <button class="btn btn-primary" onclick="nextStep()">
+                                    Siguiente <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Paso 3: Educación -->
+                        <div class="carousel-page" id="step3">
+                            <div class="section-title">
+                                <i class="fas fa-graduation-cap"></i> Educación
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Nivel de Estudios</label>
+                                    <select id="nivelEstudios">
+                                        <option value="">Seleccione</option>
+                                        <option value="Secundaria">Secundaria</option>
+                                        <option value="Preparatoria">Preparatoria</option>
+                                        <option value="Técnico">Técnico</option>
+                                        <option value="Licenciatura">Licenciatura</option>
+                                        <option value="Maestría">Maestría</option>
+                                        <option value="Doctorado">Doctorado</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Institución</label>
+                                    <input type="text" id="institucion" placeholder="Nombre de la institución">
+                                </div>
+                                <div class="form-group">
+                                    <label>Carrera</label>
+                                    <input type="text" id="carrera" placeholder="Carrera o especialidad">
+                                </div>
+                            </div>
+                            <div class="carousel-nav">
+                                <button class="btn btn-secondary" onclick="prevStep()">
+                                    <i class="fas fa-arrow-left"></i> Anterior
+                                </button>
+                                <button class="btn btn-primary" onclick="nextStep()">
+                                    Siguiente <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Paso 4: Idiomas y Habilidades -->
+                        <div class="carousel-page" id="step4">
+                            <div class="section-title">
+                                <i class="fas fa-language"></i> Idiomas y Habilidades
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Idiomas</label>
+                                    <input type="text" id="idiomas" placeholder="Inglés, Francés, etc.">
+                                </div>
+                                <div class="form-group">
+                                    <label>Habilidades Técnicas</label>
+                                    <textarea id="habilidades" rows="4" placeholder="Describa sus habilidades técnicas..."></textarea>
+                                </div>
+                            </div>
+                            <div class="carousel-nav">
+                                <button class="btn btn-secondary" onclick="prevStep()">
+                                    <i class="fas fa-arrow-left"></i> Anterior
+                                </button>
+                                <button class="btn btn-success" onclick="registrarAspirante()">
+                                    <i class="fas fa-paper-plane"></i> Enviar Solicitud
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN DE DOCUMENTOS (AGREGADA) -->
+                <div class="documentos-section" style="display: none;" id="documentosSection">
+                    <h3 class="section-title"><i class="fas fa-folder-open"></i> Documentación Requerida</h3>
+                    <p class="section-subtitle">Sube los siguientes documentos en formato PDF o imagen:</p>
+                    
+                    <div class="documentos-grid" id="documentosGrid">
+                        <!-- Los documentos se cargarán dinámicamente aquí -->
+                    </div>
+                    
+                    <div class="progress-section">
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar" id="documentosProgress" role="progressbar" style="width: 0%;">0%</div>
+                        </div>
+                        <p class="progress-text">Progreso: <span id="documentosCompletos">0</span> de <span id="documentosTotales">22</span> documentos</p>
+                    </div>
+                </div>
+
+                <div id="messageRegistro" class="mt-20"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistema para Administradores -->
+    <div class="admin-system" id="adminSystem">
+        <div class="container">
+            <header>
+                <div class="logo">
+                    <i class="fas fa-water"></i>
+                    CAPA QUINTANA ROO - PANEL ADMINISTRATIVO
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h1>Panel de Control Administrativo</h1>
+                <div class="version">v5.0.0</div>
+            </header>
+
+            <nav class="nav-tabs">
+                <div class="nav-tab active">
+                    <i class="fas fa-tachometer-alt"></i>Panel de Control
+                </div>
+                <div class="nav-tab logout-btn" onclick="logoutSystem()">
+                    <i class="fas fa-sign-out-alt"></i>Cerrar Sesión
+                </div>
+            </nav>
+
+            <!-- Contenido del Panel Admin -->
+            <div class="tab-content active">
+                <div class="admin-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> Panel de Control Administrativo</h2>
+                    <div>
+                        <button class="btn btn-info btn-sm" onclick="diagnosticarDatos()" style="margin-right: 8px; width: auto;">
+                            <i class="fas fa-stethoscope"></i> Diagnosticar
+                        </button>
+                        <button class="btn btn-warning btn-sm" onclick="diagnosticarBusquedaDesdeHTML()" style="margin-right: 8px; width: auto;">
+                            <i class="fas fa-search"></i> Diag. Búsqueda
+                        </button>
+                        <button class="btn btn-success btn-sm" onclick="exportarCSV()" style="width: auto;">
+                            <i class="fas fa-download"></i> Exportar CSV
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Estadísticas -->
+                <div class="stats-grid" id="statsContainer">
+                    <div class="loading-state">
+                        <i class="fas fa-chart-pie loading"></i>
+                        <p>Cargando estadísticas...</p>
+                    </div>
+                </div>
+
+                <!-- Filtros -->
+                <div class="filters">
+                    <h3><i class="fas fa-filter"></i> Filtros de Búsqueda</h3>
+                    <div class="filter-row">
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select id="filtroEstado">
+                                <option value="todos">Todos los estados</option>
+                                <option value="pendiente">Pendientes</option>
+                                <option value="aprobado">Aprobados</option>
+                                <option value="rechazado">Rechazados</option>
+                                <option value="en_revision">En Revisión</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Puesto</label>
+                            <select id="filtroPuesto">
+                                <option value="todos">Todos los puestos</option>
+                                <option value="Operador">Operador</option>
+                                <option value="Técnico">Técnico</option>
+                                <option value="Administrativo">Administrativo</option>
+                                <option value="Supervisor">Supervisor</option>
+                                <option value="Gerente">Gerente</option>
+                            </select>
+                        </div>
+                        <div class="form-group search-box">
+                            <label>Búsqueda</label>
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="filtroBusqueda" placeholder="Buscar por nombre, email, folio...">
+                        </div>
+                        <button class="btn btn-primary" onclick="cargarAspirantes()">
+                            <i class="fas fa-search"></i>Buscar
+                        </button>
+                        <button class="btn btn-secondary" onclick="limpiarFiltros()">
+                            <i class="fas fa-eraser"></i>Limpiar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lista de Aspirantes -->
+                <div id="listaAspirantes">
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <h3>No hay aspirantes cargados</h3>
+                        <p>Utilice los filtros para buscar aspirantes o cree datos de prueba.</p>
+                        <button class="btn btn-info mt-20" onclick="probarBusquedaBasica()">
+                            <i class="fas fa-search"></i> Probar Búsqueda Básica
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Paginación -->
+                <div class="pagination" id="paginationContainer">
+                    <!-- La paginación se genera aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver detalles del aspirante -->
+    <div id="modalAspirante" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user"></i> Expediente del Aspirante</h2>
+                <button class="close-modal" onclick="cerrarModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Los detalles del aspirante se cargan aquí -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let usuarioLogueado = null;
+        let aspirantesData = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let totalPages = 1;
+        let currentStep = 1;
+        const totalSteps = 4;
+        let userType = 'aspirante';
+        let aspiranteIdActual = null;
+        let folioActual = null;
+        let aspiranteSeleccionadoId = null;
+
+        // Tipos de documentos (basados en tu imagen)
+        const TIPOS_DOCUMENTOS = [
+            { id: 'acta_nacimiento', nombre: 'Copia del Acta de Nacimiento (legible y/o con código QR)', requerido: true },
+            { id: 'credencial_elector', nombre: 'Copia de la Credencial de Elector (Ambas caras)', requerido: true },
+            { id: 'comprobante_domicilio', nombre: 'Copia de comprobante de domicilio (no mayor a 3 meses)', requerido: true },
+            { id: 'curp', nombre: 'Copia de la Cédula Única del Registro de Población (CURP)', requerido: true },
+            { id: 'constancia_fiscal', nombre: 'Constancia de situación fiscal actualizada', requerido: true },
+            { id: 'certificado_estudios', nombre: 'Certificado o documento que acredite el último grado de estudios', requerido: true },
+            { id: 'certificado_medico', nombre: 'Certificado médico con tipo de sangre (no mayor a 30 días)', requerido: true },
+            { id: 'constancia_no_antecedentes', nombre: 'Constancia de No Inhabilitación (no mayor a 30 días)', requerido: true },
+            { id: 'cartas_recomendacion', nombre: '2 Cartas de recomendación (Actual)', requerido: true },
+            { id: 'cartilla_militar', nombre: 'Cartilla Militar', requerido: false },
+            { id: 'curriculum_vitae', nombre: 'Curriculum Vitae (formato CAPA)', requerido: true },
+            { id: 'titulo_cedula', nombre: 'Copia del Título y Cédula profesional', requerido: false },
+            { id: 'cedula_padron', nombre: 'Cédula de inscripción al padrón de profesionistas', requerido: false },
+            { id: 'hoja_servicios', nombre: 'Hoja única de servicios (si aplica)', requerido: false },
+            { id: 'montanela_respuestas', nombre: 'Montanela de respuestas', requerido: false },
+            { id: 'carta_codigo_etica', nombre: 'Carta compromiso de Código de Ética', requerido: true },
+            { id: 'carta_responsiva', nombre: 'Carta responsiva de no desempeño de otro empleo', requerido: true },
+            { id: 'fotografias', nombre: '2 fotografías recientes (cualquier tamaño)', requerido: true },
+            { id: 'correo_cfdi', nombre: 'Correo Electrónico para CFDI', requerido: true },
+            { id: 'seguro_vida', nombre: 'Seguro de Vida (formato firmado)', requerido: true },
+            { id: 'norma_municipal', nombre: 'Norma municipal del cargo designado', requerido: true },
+            { id: 'fuip', nombre: 'Formato Único de Incidencias de Personal (FUIP)', requerido: true }
+        ];
+
+        // ========== SISTEMA DE LOGIN ==========
+        function selectUserType(type) {
+            userType = type;
+            
+            // Actualizar botones
+            document.querySelectorAll('.user-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Encontrar el botón correcto usando data-type
+            const targetBtn = document.querySelector(`.user-type-btn[data-type="${type}"]`);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+            
+            // Mostrar formulario correspondiente
+            document.querySelectorAll('.login-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(type + 'Form').classList.add('active');
+        }
+
+        // Configurar event listeners para los botones
+        function setupUserTypeButtons() {
+            document.querySelectorAll('.user-type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    selectUserType(type);
+                });
+            });
+        }
+
+        function iniciarRegistroAspirante() {
+            // Aspirantes solo ven el formulario
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('aspiranteSystem').style.display = 'block';
+            goToStep(1);
+        }
+
+        function loginAdmin() {
+            const password = document.getElementById('adminPassword').value;
+
+            if (!password) {
+                showMessage('messageLogin', 'Por favor ingrese la contraseña', 'error');
+                return;
+            }
+
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="loading"></div> Verificando...';
+            btn.disabled = true;
+
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        usuarioLogueado = response.usuario;
+                        document.getElementById('loginScreen').style.display = 'none';
+                        document.getElementById('adminSystem').style.display = 'block';
+                        cargarEstadisticas();
+                        cargarAspirantes();
+                        showMessage('messageLogin', response.message, 'success');
+                    } else {
+                        showMessage('messageLogin', response ? response.message : 'Error desconocido', 'error');
+                    }
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                })
+                .withFailureHandler(function(error) {
+                    showMessage('messageLogin', 'Error de conexión: ' + error.message, 'error');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                })
+                .loginAdmin(password);
+        }
+
+        function logoutSystem() {
+            if (confirm('¿Está seguro que desea salir del sistema?')) {
+                usuarioLogueado = null;
+                aspiranteIdActual = null;
+                folioActual = null;
+                
+                // Ocultar todos los sistemas
+                document.getElementById('aspiranteSystem').style.display = 'none';
+                document.getElementById('adminSystem').style.display = 'none';
+                document.getElementById('loginScreen').style.display = 'block';
+                
+                // Resetear formularios
+                document.getElementById('adminPassword').value = '';
+                selectUserType('aspirante');
+                
+                // Limpiar mensajes
+                document.getElementById('messageLogin').innerHTML = '';
+                document.getElementById('messageRegistro').innerHTML = '';
+                
+                // Resetear carrusel
+                goToStep(1);
+                
+                // Limpiar formulario
+                document.querySelectorAll('#aspiranteSystem input, #aspiranteSystem select, #aspiranteSystem textarea').forEach(element => {
+                    if (element.type !== 'button') {
+                        element.value = '';
+                    }
+                });
+                
+                // Ocultar sección de documentos
+                document.getElementById('documentosSection').style.display = 'none';
+                document.getElementById('folioDisplay').style.display = 'none';
+            }
+        }
+
+        // ========== SISTEMA DE CARRUSEL (SOLO PARA ASPIRANTES) ==========
+        function updateProgress() {
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+                progressBar.style.width = progress + '%';
+            }
+        }
+
+        function goToStep(step) {
+            if (step < 1 || step > totalSteps) return;
+            
+            // Ocultar todos los pasos
+            document.querySelectorAll('.carousel-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostrar el paso actual
+            const stepElement = document.getElementById('step' + step);
+            if (stepElement) {
+                stepElement.classList.add('active');
+            }
+            
+            // Actualizar pasos
+            document.querySelectorAll('.step').forEach((stepElement, index) => {
+                stepElement.classList.remove('active', 'completed');
+                if (index + 1 === step) {
+                    stepElement.classList.add('active');
+                } else if (index + 1 < step) {
+                    stepElement.classList.add('completed');
+                }
+            });
+            
+            currentStep = step;
+            updateProgress();
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                // Validar campos requeridos del paso actual
+                if (currentStep === 1) {
+                    const nombre = document.getElementById('nombre').value;
+                    const email = document.getElementById('email').value;
+                    const telefono = document.getElementById('telefono').value;
+                    const puesto = document.getElementById('puesto').value;
+                    
+                    if (!nombre || !email || !telefono || !puesto) {
+                        showMessage('messageRegistro', 'Por favor complete todos los campos obligatorios', 'error');
+                        return;
+                    }
+                }
+                goToStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                goToStep(currentStep - 1);
+            }
+        }
+
+        // Configurar event listeners para los pasos
+        function setupStepButtons() {
+            document.querySelectorAll('.step').forEach(step => {
+                step.addEventListener('click', function() {
+                    const stepNumber = parseInt(this.getAttribute('data-step'));
+                    goToStep(stepNumber);
+                });
+            });
+        }
+
+        // ========== FUNCIONALIDADES DEL SISTEMA ==========
+        // Mostrar mensajes
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+            if (type === 'warning') icon = 'exclamation-triangle';
+            
+            element.innerHTML = '<div class="message ' + type + '">' +
+                '<i class="fas fa-' + icon + '"></i> ' +
+                message +
+                '</div>';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    element.innerHTML = '';
+                }, 5000);
+            }
+        }
+
+        // Mostrar mensaje temporal
+        function showMessageTemp(message, type = 'success', duration = 3000) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type} message-temp`;
+            messageDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'exclamation-triangle'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.parentNode.removeChild(messageDiv);
+                    }
+                }, 300);
+            }, duration);
+        }
+
+        // ========== GESTIÓN DE DOCUMENTOS ==========
+        /**
+         * Muestra/oculta la sección de documentos
+         */
+        function toggleDocumentosSection(mostrar = true) {
+            const section = document.getElementById('documentosSection');
+            if (section) {
+                section.style.display = mostrar ? 'block' : 'none';
+                if (mostrar) {
+                    cargarTiposDocumentos();
+                }
+            }
+        }
+
+        /**
+         * Carga los tipos de documentos desde el servidor
+         */
+        function cargarTiposDocumentos() {
+            // Usar datos locales primero, luego del servidor
+            mostrarDocumentos(TIPOS_DOCUMENTOS);
+            document.getElementById('documentosTotales').textContent = TIPOS_DOCUMENTOS.length;
+            
+            // Cargar documentos existentes si hay un aspirante ID
+            if (aspiranteIdActual) {
+                cargarDocumentosAspirante();
+            }
+        }
+
+        /**
+         * Muestra la lista de documentos en la interfaz
+         */
+        function mostrarDocumentos(tiposDocumentos) {
+            const grid = document.getElementById('documentosGrid');
+            grid.innerHTML = '';
+            
+            tiposDocumentos.forEach((tipo, index) => {
+                const docHTML = `
+                    <div class="documento-item" id="doc-${tipo.id}">
+                        <div class="documento-header">
+                            <span class="documento-title">${tipo.nombre}</span>
+                            <span class="${tipo.requerido ? 'documento-requerido' : 'documento-no-requerido'}">
+                                ${tipo.requerido ? 'Requerido' : 'Opcional'}
+                            </span>
+                        </div>
+                        
+                        <div class="documento-upload">
+                            <input type="file" 
+                                   id="file-${tipo.id}" 
+                                   class="d-none" 
+                                   accept=".pdf,.jpg,.jpeg,.png"
+                                   onchange="subirDocumento('${tipo.id}', this)">
+                            
+                            <button type="button" 
+                                    class="upload-btn" 
+                                    onclick="document.getElementById('file-${tipo.id}').click()">
+                                📁 Seleccionar Archivo
+                            </button>
+                        </div>
+                        
+                        <div class="documento-info">
+                            <span class="documento-estado estado-pendiente" id="estado-${tipo.id}">
+                                Pendiente
+                            </span>
+                            <div class="documento-nombre" id="nombre-${tipo.id}">
+                                No se ha subido ningún archivo
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                grid.innerHTML += docHTML;
+            });
+        }
+
+        /**
+         * Sube un documento a Google Drive
+         */
+        function subirDocumento(tipoDocumento, input) {
+            const file = input.files[0];
+            if (!file || !aspiranteIdActual) {
+                mostrarMensaje('Debes completar el registro primero', 'warning');
+                return;
+            }
+            
+            // Validar tamaño (máximo 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                showMessage('messageRegistro', 'El archivo es demasiado grande (máximo 10MB)', 'error');
+                return;
+            }
+            
+            // Validar tipo de archivo
+            const tiposPermitidos = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'];
+            if (!tiposPermitidos.includes(file.type)) {
+                showMessage('messageRegistro', 'Formato no permitido. Use PDF, JPG o PNG', 'error');
+                return;
+            }
+            
+            // Mostrar loading
+            const estadoElement = document.getElementById(`estado-${tipoDocumento}`);
+            estadoElement.className = 'documento-estado estado-pendiente';
+            estadoElement.textContent = 'Subiendo...';
+            
+            // Convertir archivo a base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64File = e.target.result;
+                
+                google.script.run
+                    .withSuccessHandler(function(response) {
+                        if (response && response.success) {
+                            // Actualizar interfaz
+                            estadoElement.className = 'documento-estado estado-completo';
+                            estadoElement.textContent = 'Subido';
+                            
+                            document.getElementById(`nombre-${tipoDocumento}`).textContent = 
+                                `📄 ${file.name} (${formatBytes(file.size)})`;
+                            
+                            // Actualizar progreso
+                            actualizarProgresoDocumentos();
+                            showMessageTemp('✅ Documento subido correctamente', 'success');
+                        } else {
+                            estadoElement.className = 'documento-estado estado-pendiente';
+                            estadoElement.textContent = 'Error';
+                            showMessage('messageRegistro', response.message, 'error');
+                        }
+                    })
+                    .withFailureHandler(function(error) {
+                        estadoElement.className = 'documento-estado estado-pendiente';
+                        estadoElement.textContent = 'Error';
+                        showMessage('messageRegistro', 'Error al subir documento', 'error');
+                        console.error('Error:', error);
+                    })
+                    .subirDocumento(aspiranteIdActual, tipoDocumento, base64File, file.name);
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        /**
+         * Carga los documentos de un aspirante
+         */
+        function cargarDocumentosAspirante() {
+            if (!aspiranteIdActual) return;
+            
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        response.documentos.forEach(doc => {
+                            const estadoElement = document.getElementById(`estado-${doc.tipo}`);
+                            const nombreElement = document.getElementById(`nombre-${doc.tipo}`);
+                            
+                            if (estadoElement && nombreElement) {
+                                estadoElement.textContent = doc.estado.charAt(0).toUpperCase() + doc.estado.slice(1);
+                                estadoElement.className = `documento-estado estado-${doc.estado}`;
+                                
+                                if (doc.nombreArchivo) {
+                                    nombreElement.textContent = `📄 ${doc.nombreArchivo}`;
+                                }
+                            }
+                        });
+                        
+                        actualizarProgresoDocumentos();
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    console.error('Error al cargar documentos:', error);
+                })
+                .obtenerDocumentosAspirante(aspiranteIdActual);
+        }
+
+        /**
+         * Actualiza la barra de progreso de documentos
+         */
+        function actualizarProgresoDocumentos() {
+            if (!aspiranteIdActual) return;
+            
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        const data = response.data;
+                        const porcentaje = data.porcentajeCompletos;
+                        
+                        document.getElementById('documentosCompletos').textContent = data.completos;
+                        document.getElementById('documentosTotales').textContent = data.total;
+                        
+                        const progressBar = document.getElementById('documentosProgress');
+                        progressBar.style.width = `${porcentaje}%`;
+                        progressBar.textContent = `${porcentaje}%`;
+                        
+                        // Actualizar color según porcentaje
+                        if (porcentaje < 50) {
+                            progressBar.style.background = '#e74c3c';
+                        } else if (porcentaje < 100) {
+                            progressBar.style.background = '#f39c12';
+                        } else {
+                            progressBar.style.background = '#27ae60';
+                        }
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    console.error('Error al obtener estadísticas:', error);
+                })
+                .obtenerEstadisticasDocumentos(aspiranteIdActual);
+        }
+
+        /**
+         * Formatea bytes a tamaño legible
+         */
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        // ========== PANEL ADMINISTRATIVO - GESTIÓN DE DOCUMENTOS ==========
+        /**
+         * Muestra el expediente completo de un aspirante (incluyendo documentos)
+         */
+        function mostrarExpedienteCompleto(aspiranteId) {
+            aspiranteSeleccionadoId = aspiranteId;
+            verDetallesAspirante(aspiranteId);
+            cargarDocumentosParaAdmin(aspiranteId);
+        }
+
+        /**
+         * Carga los documentos de un aspirante en el panel administrativo
+         */
+        function cargarDocumentosParaAdmin(aspiranteId) {
+            const modalBody = document.getElementById('modalBody');
+            if (!modalBody) return;
+            
+            // Añadir sección para documentos
+            const existingDocSection = document.getElementById('expedienteDocumentosModal');
+            if (existingDocSection) {
+                existingDocSection.remove();
+            }
+            
+            const docSection = document.createElement('div');
+            docSection.id = 'expedienteDocumentosModal';
+            docSection.className = 'expediente-documentos';
+            docSection.innerHTML = `
+                <div class="loading-state">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando documentos...</span>
+                    </div>
+                    <p class="mt-2">Cargando documentos...</p>
+                </div>
+            `;
+            
+            modalBody.appendChild(docSection);
+            
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        mostrarDocumentosEnExpediente(response.documentos, aspiranteId);
+                    } else {
+                        docSection.innerHTML = `
+                            <h5 class="mb-3"><i class="fas fa-folder-open"></i> Documentos del Aspirante</h5>
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                No se han subido documentos para este aspirante.
+                            </div>
+                        `;
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    docSection.innerHTML = `
+                        <h5 class="mb-3"><i class="fas fa-folder-open"></i> Documentos del Aspirante</h5>
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Error al cargar documentos: ${error.message}
+                        </div>
+                    `;
+                })
+                .obtenerDocumentosAspirante(aspiranteId);
+        }
+
+        /**
+         * Muestra los documentos en la interfaz del administrador
+         */
+        function mostrarDocumentosEnExpediente(documentos, aspiranteId) {
+            const docSection = document.getElementById('expedienteDocumentosModal');
+            if (!docSection) return;
+            
+            let html = `
+                <h5 class="mb-3"><i class="fas fa-folder-open"></i> Documentos del Aspirante</h5>
+                <div class="table-responsive">
+                    <table class="documentos-table">
+                        <thead>
+                            <tr>
+                                <th>Documento</th>
+                                <th>Estado</th>
+                                <th>Fecha Subida</th>
+                                <th>Archivo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            if (documentos && documentos.length > 0) {
+                documentos.forEach(doc => {
+                    const tipoInfo = TIPOS_DOCUMENTOS.find(t => t.id === doc.tipo) || { nombre: doc.tipo };
+                    const fechaSubida = doc.fechaSubida ? new Date(doc.fechaSubida).toLocaleDateString('es-MX') : 'No subido';
+                    const tieneArchivo = doc.url && doc.url.trim() !== '';
+                    
+                    html += `
+                        <tr>
+                            <td>
+                                <strong>${tipoInfo.nombre}</strong>
+                                ${doc.observaciones ? `<br><small class="text-muted">${doc.observaciones}</small>` : ''}
+                            </td>
+                            <td>
+                                <span class="documento-estado estado-${doc.estado}">
+                                    ${doc.estado.charAt(0).toUpperCase() + doc.estado.slice(1)}
+                                </span>
+                                ${doc.revisadoPor ? `<br><small>Por: ${doc.revisadoPor}</small>` : ''}
+                            </td>
+                            <td>${fechaSubida}</td>
+                            <td>
+                                ${tieneArchivo ? 
+                                    `<a href="${doc.url}" target="_blank" class="text-primary">
+                                        <i class="fas fa-external-link-alt"></i> Ver en Drive
+                                    </a>` 
+                                    : 'No disponible'
+                                }
+                            </td>
+                            <td>
+                                <div class="documento-acciones">
+                                    ${tieneArchivo ? 
+                                        `<button class="btn-ver" onclick="verDocumento('${doc.url}')">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </button>` 
+                                        : ''
+                                    }
+                                    <button class="btn-aprobar" onclick="actualizarEstadoDocumento('${doc.id}', 'aprobado', '${usuarioLogueado || "Administrador"}')">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn-rechazar" onclick="actualizarEstadoDocumento('${doc.id}', 'rechazado', '${usuarioLogueado || "Administrador"}')">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } else {
+                html += `
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <i class="fas fa-info-circle"></i> No hay documentos registrados
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    <iframe id="visorDocumento" class="visor-documento" frameborder="0" style="display: none;"></iframe>
+                </div>
+            `;
+            
+            docSection.innerHTML = html;
+        }
+
+        /**
+         * Actualiza el estado de un documento
+         */
+        function actualizarEstadoDocumento(documentoId, estado, usuario) {
+            const observaciones = prompt(`Ingrese observaciones para el documento (${estado}):`, '');
+            
+            if (observaciones !== null) {
+                google.script.run
+                    .withSuccessHandler(function(response) {
+                        if (response && response.success) {
+                            showMessageTemp('✅ Estado del documento actualizado', 'success');
+                            // Recargar documentos
+                            if (aspiranteSeleccionadoId) {
+                                cargarDocumentosParaAdmin(aspiranteSeleccionadoId);
+                            }
+                        } else {
+                            showMessageTemp(response.message, 'error');
+                        }
+                    })
+                    .withFailureHandler(function(error) {
+                        showMessageTemp('Error al actualizar documento: ' + error.message, 'error');
+                    })
+                    .actualizarEstadoDocumento(documentoId, estado, observaciones, usuario);
+            }
+        }
+
+        /**
+         * Muestra un documento en el visor
+         */
+        function verDocumento(url) {
+            const modalBody = document.getElementById('modalBody');
+            let visor = document.getElementById('visorDocumentoModal');
+            
+            if (!visor) {
+                visor = document.createElement('iframe');
+                visor.id = 'visorDocumentoModal';
+                visor.className = 'visor-documento mt-3';
+                modalBody.appendChild(visor);
+            }
+            
+            visor.src = url.replace('/view', '/preview');
+            visor.style.display = 'block';
+            
+            // Desplazar hasta el visor
+            visor.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ========== REGISTRO DE ASPIRANTE MODIFICADO ==========
+        function registrarAspirante() {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="loading"></div> Procesando...';
+            btn.disabled = true;
+
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                puesto: document.getElementById('puesto').value,
+                genero: document.getElementById('genero').value,
+                edad: document.getElementById('edad').value,
+                aniosExperiencia: document.getElementById('aniosExperiencia').value,
+                experiencia: document.getElementById('experiencia').value,
+                ultimoEmpleo: document.getElementById('ultimoEmpleo').value,
+                ultimoPuesto: document.getElementById('ultimoPuesto').value,
+                nivelEstudios: document.getElementById('nivelEstudios').value,
+                institucion: document.getElementById('institucion').value,
+                carrera: document.getElementById('carrera').value,
+                idiomas: document.getElementById('idiomas').value,
+                habilidades: document.getElementById('habilidades').value
+            };
+
+            // Validación final
+            if (!datos.nombre || !datos.email || !datos.telefono || !datos.puesto) {
+                showMessage('messageRegistro', 'Por favor complete todos los campos obligatorios', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return;
+            }
+
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        // GUARDAR EL ID Y FOLIO DEL ASPIRANTE
+                        aspiranteIdActual = response.aspiranteId;
+                        folioActual = response.folio;
+                        
+                        // Mostrar folio
+                        document.getElementById('folioValue').textContent = response.folio;
+                        document.getElementById('folioDisplay').style.display = 'block';
+                        
+                        // Mostrar sección de documentos
+                        toggleDocumentosSection(true);
+                        
+                        // Desplazar a la sección de documentos
+                        document.getElementById('documentosSection').scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        
+                        showMessage('messageRegistro', response.message, 'success');
+                    } else {
+                        showMessage('messageRegistro', response ? response.message : 'Error desconocido', 'error');
+                    }
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                })
+                .withFailureHandler(function(error) {
+                    showMessage('messageRegistro', 'Error de conexión: ' + error.message, 'error');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                })
+                .registrarAspirante(datos);
+        }
+
+        // ========== FUNCIONES SOLO PARA ADMINISTRADORES ==========
+        // Cargar estadísticas (solo admin) - CORREGIDA
+        function cargarEstadisticas() {
+            const container = document.getElementById('statsContainer');
+            if (!container) return;
+            
+            container.innerHTML = `
+                <div class="loading-state">
+                    <i class="fas fa-chart-pie loading"></i>
+                    <p>Cargando estadísticas...</p>
+                </div>
+            `;
+
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        const stats = response.data;
+                        const container = document.getElementById('statsContainer');
+                        
+                        if (container) {
+                            container.innerHTML = 
+                                '<div class="stat-card total" onclick="filtrarPorEstado(\'todos\')">' +
+                                    '<div class="stat-number">' + (stats.total || 0) + '</div>' +
+                                    '<div class="stat-label">Total Aspirantes</div>' +
+                                '</div>' +
+                                '<div class="stat-card pendientes" onclick="filtrarPorEstado(\'pendiente\')">' +
+                                    '<div class="stat-number">' + (stats.pendientes || 0) + '</div>' +
+                                    '<div class="stat-label">Pendientes</div>' +
+                                '</div>' +
+                                '<div class="stat-card aprobados" onclick="filtrarPorEstado(\'aprobado\')">' +
+                                    '<div class="stat-number">' + (stats.aprobados || 0) + '</div>' +
+                                    '<div class="stat-label">Aprobados</div>' +
+                                '</div>' +
+                                '<div class="stat-card rechazados" onclick="filtrarPorEstado(\'rechazado\')">' +
+                                    '<div class="stat-number">' + (stats.rechazados || 0) + '</div>' +
+                                    '<div class="stat-label">Rechazados</div>' +
+                                '</div>' +
+                                '<div class="stat-card en_revision" onclick="filtrarPorEstado(\'en_revision\')">' +
+                                    '<div class="stat-number">' + (stats.enRevision || 0) + '</div>' +
+                                    '<div class="stat-label">En Revisión</div>' +
+                                '</div>';
+                        }
+                    } else {
+                        container.innerHTML = '<div class="message error">Error al cargar estadísticas</div>';
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    console.error('Error cargando estadísticas:', error);
+                    container.innerHTML = '<div class="message error">Error de conexión al cargar estadísticas</div>';
+                })
+                .obtenerEstadisticasTiempoReal();
+        }
+
+        // Función para cargar aspirantes (solo admin) - MEJORADA
+        function cargarAspirantes(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            const filtros = {
+                estado: document.getElementById('filtroEstado')?.value || 'todos',
+                puesto: document.getElementById('filtroPuesto')?.value || 'todos',
+                busqueda: document.getElementById('filtroBusqueda')?.value || '',
+                pagina: currentPage,
+                itemsPorPagina: itemsPerPage
+            };
+
+            const btn = event ? event.target : null;
+            const originalText = btn ? btn.innerHTML : '';
+
+            if (btn) {
+                btn.innerHTML = '<div class="loading"></div> Buscando...';
+                btn.disabled = true;
+            }
+
+            const listaAspirantes = document.getElementById('listaAspirantes');
+            if (listaAspirantes) {
+                listaAspirantes.innerHTML = `
+                    <div class="loading-state">
+                        <i class="fas fa-spinner loading"></i>
+                        <p>Buscando aspirantes...</p>
+                    </div>
+                `;
+            }
+
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        aspirantesData = Array.isArray(response.data) ? response.data : [];
+                        totalPages = parseInt(response.totalPages) || 1;
+                        currentPage = parseInt(response.currentPage) || 1;
+                        
+                        mostrarAspirantes(aspirantesData);
+                        actualizarPaginacion();
+                        cargarEstadisticas(); // Actualizar estadísticas después de cargar aspirantes
+                    } else {
+                        const errorMsg = response ? response.message : 'Error del servidor';
+                        if (listaAspirantes) {
+                            listaAspirantes.innerHTML = `
+                                <div class="message error">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    ${errorMsg}
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    if (btn) {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    let errorMessage = 'Error de conexión con el servidor';
+                    if (error && error.message) {
+                        errorMessage += ': ' + error.message;
+                    }
+                    
+                    if (listaAspirantes) {
+                        listaAspirantes.innerHTML = `
+                            <div class="message error">
+                                <i class="fas fa-unlink"></i>
+                                ${errorMessage}
+                            </div>
+                        `;
+                    }
+                    
+                    if (btn) {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }
+                })
+                .obtenerAspirantes(filtros);
+        }
+
+        // Función para limpiar filtros
+        function limpiarFiltros() {
+            document.getElementById('filtroEstado').value = 'todos';
+            document.getElementById('filtroPuesto').value = 'todos';
+            document.getElementById('filtroBusqueda').value = '';
+            currentPage = 1;
+            cargarAspirantes();
+        }
+
+        // Filtrar por estado desde las tarjetas de estadísticas
+        function filtrarPorEstado(estado) {
+            document.getElementById('filtroEstado').value = estado;
+            currentPage = 1;
+            cargarAspirantes();
+        }
+
+        // Actualizar paginación
+        function actualizarPaginacion() {
+            const container = document.getElementById('paginationContainer');
+            if (!container) return;
+            
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = `
+                <button class="pagination-btn" onclick="cambiarPagina(1)" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-angle-double-left"></i>
+                </button>
+                <button class="pagination-btn" onclick="cambiarPagina(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-angle-left"></i>
+                </button>
+                
+                <span style="color: var(--dark); font-weight: 600;">Página ${currentPage} de ${totalPages}</span>
+                
+                <button class="pagination-btn" onclick="cambiarPagina(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i class="fas fa-angle-right"></i>
+                </button>
+                <button class="pagination-btn" onclick="cambiarPagina(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i class="fas fa-angle-double-right"></i>
+                </button>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Cambiar página
+        function cambiarPagina(pagina) {
+            if (pagina < 1 || pagina > totalPages) return;
+            
+            currentPage = pagina;
+            cargarAspirantes();
+        }
+
+        // Mostrar aspirantes en el panel - MEJORADA (para incluir documentos)
+        function mostrarAspirantes(aspirantes) {
+            const container = document.getElementById('listaAspirantes');
+            if (!container) return;
+            
+            if (!aspirantes || aspirantes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No se encontraron aspirantes</h3>
+                        <p>No hay aspirantes que coincidan con los filtros seleccionados.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            aspirantes.forEach(aspirante => {
+                if (!aspirante) return;
+                
+                let observacionesHTML = '';
+                if (aspirante.observaciones) {
+                    observacionesHTML = '<div class="detail-item">' +
+                        '<span class="detail-label">Observaciones:</span>' +
+                        '<span>' + (aspirante.observaciones || '') + '</span>' +
+                    '</div>';
+                }
+
+                let botonesHTML = '';
+                const estadoActual = aspirante.estado || 'pendiente';
+                
+                switch(estadoActual) {
+                    case 'aprobado':
+                        botonesHTML = 
+                            '<button class="btn btn-info btn-sm" onclick="mostrarExpedienteCompleto(' + aspirante.id + ')">' +
+                                '<i class="fas fa-eye"></i>Ver Expediente' +
+                            '</button>' +
+                            '<button class="btn btn-warning btn-sm" onclick="cambiarEstado(' + aspirante.id + ', \'en_revision\')">' +
+                                '<i class="fas fa-clock"></i>Marcar Revisión' +
+                            '</button>' +
+                            '<button class="btn btn-danger btn-sm" onclick="cambiarEstado(' + aspirante.id + ', \'rechazado\')">' +
+                                '<i class="fas fa-times"></i>Rechazar' +
+                            '</button>';
+                        break;
+                    case 'rechazado':
+                        botonesHTML = 
+                            '<button class="btn btn-info btn-sm" onclick="mostrarExpedienteCompleto(' + aspirante.id + ')">' +
+                                '<i class="fas fa-eye"></i>Ver Expediente' +
+                            '</button>' +
+                            '<button class="btn btn-success btn-sm" onclick="cambiarEstado(' + aspirante.id + ', \'aprobado\')">' +
+                                '<i class="fas fa-check"></i>Aprobar' +
+                            '</button>' +
+                            '<button class="btn btn-warning btn-sm" onclick="cambiarEstado(' + aspirante.id + ', \'en_revision\')">' +
+                                '<i class="fas fa-clock"></i>Marcar Revisión' +
+                            '</button>';
+                        break;
+                    case 'en_revision':
+                        botonesHTML = 
+                            '<button class="btn btn-info btn-sm" onclick="mostrarExpedienteCompleto(' + aspirante.id + ')">' +
+                                '<i class="fas fa-eye"></i>Ver Expediente' +
+                            '</button>' +
+                            '<button class="btn btn-success btn-sm" onclick="cambiarEstado(' + aspirante.id + ', \'aprobado\')">' +
+                                '<i class="fas fa-check"></i>Aprobar' +
+                            '</button>' +
+                            '<button class="btn btn-danger btn-sm" onclick="cambiarEstado(' + aspirante.id + ', \'rechazado\')">' +
+                                '<i class="fas fa-times"></i>Rechazar' +
+                            '</button>';
+                        break;
+                    default:
+                        botonesHTML = 
+                            '<button class="btn btn-info btn-sm" onclick="mostrarExpedienteCompleto(' + aspirante.id + ')">' +
+                                '<i class="fas fa-eye"></i>Ver Expediente' +
+                            '</button>' +
+                            '<button class="btn btn-success btn-sm" onclick="cambiarEstado(' + aspirante.id + ', \'aprobado\')">' +
+                                '<i class="fas fa-check"></i>Aprobar' +
+                            '</button>' +
+                            '<button class="btn btn-danger btn-sm" onclick="cambiarEstado(' + aspirante.id + ', \'rechazado\')">' +
+                                '<i class="fas fa-times"></i>Rechazar' +
+                            '</button>' +
+                            '<button class="btn btn-warning btn-sm" onclick="cambiarEstado(' + aspirante.id + ', \'en_revision\')">' +
+                                '<i class="fas fa-clock"></i>Revisión' +
+                            '</button>';
+                }
+
+                html += 
+                    '<div class="aspirante-card" id="aspirante-' + aspirante.id + '">' +
+                        '<div class="aspirante-header">' +
+                            '<div class="aspirante-name">' + (aspirante.nombre || 'N/A') + '</div>' +
+                            '<div class="aspirante-folio">' + (aspirante.folio || 'SIN FOLIO') + '</div>' +
+                        '</div>' +
+                        
+                        '<div class="aspirante-details">' +
+                            '<div class="detail-item">' +
+                                '<span class="detail-label">Email:</span>' +
+                                '<span>' + (aspirante.email || 'N/A') + '</span>' +
+                            '</div>' +
+                            '<div class="detail-item">' +
+                                '<span class="detail-label">Teléfono:</span>' +
+                                '<span>' + (aspirante.telefono || 'N/A') + '</span>' +
+                            '</div>' +
+                            '<div class="detail-item">' +
+                                '<span class="detail-label">Puesto:</span>' +
+                                '<span>' + (aspirante.puesto || 'N/A') + '</span>' +
+                            '</div>' +
+                            '<div class="detail-item">' +
+                                '<span class="detail-label">Estado:</span>' +
+                                '<span class="estado-badge estado-' + estadoActual + '">' +
+                                    estadoActual.toUpperCase() +
+                                '</span>' +
+                            '</div>' +
+                        '</div>' +
+
+                        observacionesHTML +
+
+                        '<div class="aspirante-actions">' +
+                            botonesHTML +
+                        '</div>' +
+                    '</div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Cambiar estado de aspirante
+        function cambiarEstado(id, estado) {
+            const aspirante = aspirantesData.find(a => a.id === id);
+            if (!aspirante) return;
+
+            const mensajes = {
+                'aprobado': 'aprobar',
+                'rechazado': 'rechazar', 
+                'en_revision': 'marcar en revisión'
+            };
+
+            const confirmacion = confirm(`¿Está seguro que desea ${mensajes[estado]} al aspirante ${aspirante.nombre}?`);
+            if (!confirmacion) return;
+
+            const observaciones = prompt('Ingrese observaciones (opcional):') || '';
+            
+            if (observaciones === null) return;
+
+            const botones = document.querySelectorAll(`button[onclick*="cambiarEstado(${id}, '${estado}')"]`);
+            botones.forEach(boton => {
+                const originalText = boton.innerHTML;
+                boton.innerHTML = '<div class="loading"></div>';
+                boton.disabled = true;
+            });
+
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        showMessageTemp(`✅ Estado actualizado a: ${estado.toUpperCase()}`);
+                        
+                        setTimeout(() => {
+                            cargarAspirantes();
+                            cargarEstadisticas();
+                        }, 500);
+                        
+                    } else {
+                        alert('Error: ' + (response ? response.message : 'Error desconocido'));
+                    }
+                    
+                    botones.forEach(boton => {
+                        boton.innerHTML = originalText;
+                        boton.disabled = false;
+                    });
+                })
+                .withFailureHandler(function(error) {
+                    alert('Error: ' + error.message);
+                    
+                    botones.forEach(boton => {
+                        boton.innerHTML = originalText;
+                        boton.disabled = false;
+                    });
+                })
+                .actualizarEstadoAspirante(id, estado, observaciones, usuarioLogueado);
+        };
+
+        // Ver detalles completos del aspirante (versión modificada)
+        function verDetallesAspirante(id) {
+            const aspirante = aspirantesData.find(a => a.id === id);
+            if (!aspirante) return;
+
+            const modalBody = document.getElementById('modalBody');
+            if (!modalBody) return;
+            
+            modalBody.innerHTML = 
+                '<div class="document-section">' +
+                    '<h3><i class="fas fa-user-circle"></i> Información Personal</h3>' +
+                    '<div class="document-grid">' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Nombre Completo:</span>' +
+                            '<span class="document-value">' + (aspirante.nombre || '<span class="empty-value">No especificado</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Email:</span>' +
+                            '<span class="document-value">' + (aspirante.email || '<span class="empty-value">No especificado</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Teléfono:</span>' +
+                            '<span class="document-value">' + (aspirante.telefono || '<span class="empty-value">No especificado</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Género:</span>' +
+                            '<span class="document-value">' + (aspirante.genero || '<span class="empty-value">No especificado</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Edad:</span>' +
+                            '<span class="document-value">' + (aspirante.edad || '<span class="empty-value">No especificado</span>') + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+
+                '<div class="document-section">' +
+                    '<h3><i class="fas fa-briefcase"></i> Experiencia Laboral</h3>' +
+                    '<div class="document-grid">' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Puesto de Interés:</span>' +
+                            '<span class="document-value">' + (aspirante.puesto || '<span class="empty-value">No especificado</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Años de Experiencia:</span>' +
+                            '<span class="document-value">' + (aspirante.aniosExperiencia || '<span class="empty-value">No especificado</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Experiencia Laboral:</span>' +
+                            '<span class="document-value">' + (aspirante.experiencia || '<span class="empty-value">No especificada</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Último Empleo:</span>' +
+                            '<span class="document-value">' + (aspirante.ultimoEmpleo || '<span class="empty-value">No especificado</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Último Puesto:</span>' +
+                            '<span class="document-value">' + (aspirante.ultimoPuesto || '<span class="empty-value">No especificado</span>') + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+
+                '<div class="document-section">' +
+                    '<h3><i class="fas fa-graduation-cap"></i> Educación</h3>' +
+                    '<div class="document-grid">' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Nivel de Estudios:</span>' +
+                            '<span class="document-value">' + (aspirante.nivelEstudios || '<span class="empty-value">No especificado</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Institución:</span>' +
+                            '<span class="document-value">' + (aspirante.institucion || '<span class="empty-value">No especificada</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Carrera:</span>' +
+                            '<span class="document-value">' + (aspirante.carrera || '<span class="empty-value">No especificada</span>') + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+
+                '<div class="document-section">' +
+                    '<h3><i class="fas fa-language"></i> Idiomas y Habilidades</h3>' +
+                    '<div class="document-grid">' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Idiomas:</span>' +
+                            '<span class="document-value">' + (aspirante.idiomas || '<span class="empty-value">No especificados</span>') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Habilidades Técnicas:</span>' +
+                            '<span class="document-value">' + (aspirante.habilidades || '<span class="empty-value">No especificadas</span>') + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+
+                '<div class="document-section">' +
+                    '<h3><i class="fas fa-info-circle"></i> Información Adicional</h3>' +
+                    '<div class="document-grid">' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Folio:</span>' +
+                            '<span class="document-value">' + (aspirante.folio || 'SIN FOLIO') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Estado:</span>' +
+                            '<span class="document-value estado-badge estado-' + (aspirante.estado || 'pendiente') + '">' +
+                                (aspirante.estado || 'pendiente').toUpperCase() +
+                            '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Fecha de Registro:</span>' +
+                            '<span class="document-value">' + (aspirante.fechaRegistro ? new Date(aspirante.fechaRegistro).toLocaleDateString('es-MX') : 'N/A') + '</span>' +
+                        '</div>' +
+                        '<div class="document-item">' +
+                            '<span class="document-label">Observaciones:</span>' +
+                            '<span class="document-value">' + (aspirante.observaciones || '<span class="empty-value">Sin observaciones</span>') + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+            document.getElementById('modalAspirante').style.display = 'block';
+        }
+
+        // Cerrar modal
+        function cerrarModal() {
+            document.getElementById('modalAspirante').style.display = 'none';
+        }
+
+        // Exportar datos
+        function exportarCSV() {
+            const filtros = {
+                estado: document.getElementById('filtroEstado')?.value || 'todos',
+                puesto: document.getElementById('filtroPuesto')?.value || 'todos',
+                busqueda: document.getElementById('filtroBusqueda')?.value || ''
+            };
+
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="loading"></div> Exportando...';
+            btn.disabled = true;
+
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        const blob = new Blob([response.data], { type: 'text/csv;charset=utf-8;' });
+                        const link = document.createElement('a');
+                        const url = URL.createObjectURL(blob);
+                        link.setAttribute('href', url);
+                        link.setAttribute('download', response.filename);
+                        link.style.visibility = 'hidden';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        showMessageTemp('✅ Datos exportados correctamente');
+                    } else {
+                        alert('Error al exportar: ' + (response ? response.message : 'Error desconocido'));
+                    }
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                })
+                .withFailureHandler(function(error) {
+                    alert('Error: ' + error.message);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                })
+                .exportarCSV(filtros);
+        }
+
+        // Funciones de diagnóstico
+        function diagnosticarDatos() {
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        alert('Diagnóstico exitoso:\n' + response.mensaje + 
+                              '\n\nTotal de filas: ' + response.totalFilas +
+                              '\nAspirantes: ' + (response.totalFilas - 1));
+                    } else {
+                        alert('Error en diagnóstico: ' + (response ? response.message : 'Error desconocido'));
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    alert('Error de conexión: ' + error.message);
+                })
+                .diagnosticarDatos();
+        }
+
+        function diagnosticarBusquedaDesdeHTML() {
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    alert('Diagnóstico completado. Revisa la consola para más detalles.');
+                })
+                .withFailureHandler(function(error) {
+                    alert('Error en diagnóstico: ' + error.message);
+                })
+                .diagnosticarBusqueda();
+        }
+
+        function crearDatosPrueba() {
+            if (confirm('¿Está seguro de crear datos de prueba? Esto agregará 2 aspirantes de ejemplo.')) {
+                google.script.run
+                    .withSuccessHandler(function(response) {
+                        if (response && response.success) {
+                            alert('Datos de prueba creados exitosamente');
+                            cargarEstadisticas();
+                            cargarAspirantes();
+                        } else {
+                            alert('Error creando datos: ' + (response ? response.message : 'Error desconocido'));
+                        }
+                    })
+                    .withFailureHandler(function(error) {
+                        alert('Error de conexión: ' + error.message);
+                    })
+                    .crearDatosPrueba();
+            }
+        }
+
+        function probarConexionInmediata() {
+            const filtrosTest = {
+                estado: 'todos',
+                puesto: 'todos',
+                busqueda: '',
+                pagina: 1,
+                itemsPorPagina: 5
+            };
+            
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        alert('✅ Conexión exitosa! Encontrados: ' + response.total + ' aspirantes');
+                        cargarAspirantes();
+                    } else {
+                        alert('❌ Error en la respuesta: ' + (response ? response.message : 'Respuesta vacía'));
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    alert('❌ Error de conexión: ' + error.message);
+                })
+                .obtenerAspirantes(filtrosTest);
+        }
+
+        function probarBusquedaBasica() {
+            const filtrosTest = {
+                estado: 'todos',
+                puesto: 'todos',
+                busqueda: '',
+                pagina: 1,
+                itemsPorPagina: 3
+            };
+            
+            google.script.run
+                .withSuccessHandler(function(response) {
+                    if (response && response.success) {
+                        alert(`✅ Búsqueda básica FUNCIONA\nEncontrados: ${response.total} aspirantes`);
+                        cargarAspirantes();
+                    } else {
+                        alert('❌ La búsqueda básica falló: ' + (response ? response.message : 'Respuesta inválida'));
+                    }
+                })
+                .withFailureHandler(function(error) {
+                    alert('❌ Falla en comunicación básica: ' + error.message);
+                })
+                .obtenerAspirantes(filtrosTest);
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalAspirante');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        }
+
+        // Búsqueda en tiempo real
+        function configurarBusquedaEnTiempoReal() {
+            const filtroBusqueda = document.getElementById('filtroBusqueda');
+            if (filtroBusqueda) {
+                let searchTimer;
+                filtroBusqueda.addEventListener('input', function() {
+                    clearTimeout(searchTimer);
+                    searchTimer = setTimeout(() => {
+                        currentPage = 1;
+                        cargarAspirantes();
+                    }, 800);
+                });
+            }
+        }
+
+        // Inicializar sistema
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Sistema FDRA-CAPA v5.0.0 inicializado - CON GESTIÓN DE DOCUMENTOS');
+            
+            // Configurar event listeners
+            setupUserTypeButtons();
+            setupStepButtons();
+            configurarBusquedaEnTiempoReal();
+            
+            // Asegurar que el tipo de usuario por defecto esté seleccionado
+            selectUserType('aspirante');
+        });
+
+        // ========== HACER FUNCIONES GLOBALES ==========
+        window.selectUserType = selectUserType;
+        window.iniciarRegistroAspirante = iniciarRegistroAspirante;
+        window.loginAdmin = loginAdmin;
+        window.logoutSystem = logoutSystem;
+        window.goToStep = goToStep;
+        window.nextStep = nextStep;
+        window.prevStep = prevStep;
+        window.registrarAspirante = registrarAspirante;
+        window.cargarEstadisticas = cargarEstadisticas;
+        window.cargarAspirantes = cargarAspirantes;
+        window.limpiarFiltros = limpiarFiltros;
+        window.filtrarPorEstado = filtrarPorEstado;
+        window.cambiarPagina = cambiarPagina;
+        window.verDetallesAspirante = verDetallesAspirante;
+        window.mostrarExpedienteCompleto = mostrarExpedienteCompleto;
+        window.cambiarEstado = cambiarEstado;
+        window.cerrarModal = cerrarModal;
+        window.exportarCSV = exportarCSV;
+        window.diagnosticarDatos = diagnosticarDatos;
+        window.diagnosticarBusquedaDesdeHTML = diagnosticarBusquedaDesdeHTML;
+        window.crearDatosPrueba = crearDatosPrueba;
+        window.probarConexionInmediata = probarConexionInmediata;
+        window.probarBusquedaBasica = probarBusquedaBasica;
+        window.subirDocumento = subirDocumento;
+        window.verDocumento = verDocumento;
+        window.actualizarEstadoDocumento = actualizarEstadoDocumento;
+    </script>
+</body>
+</html>
